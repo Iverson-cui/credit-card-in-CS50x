@@ -1,0 +1,87 @@
+#include<cs50.h>
+#include<stdio.h>
+
+int a[16] = { 0 };
+
+void justify(long number);
+
+void kind(long number);
+
+int power(int a, int b);
+
+int main(void)
+{
+    //tell if the number of the card matches the algorithm
+    long number = get_long("the card number ");
+    justify(number);
+    //tell which kind the card belongs to
+    kind(number);
+}
+
+
+
+
+
+
+
+
+void justify(long number)
+{
+    long new = number;
+    int sum1 = 0, sum2 = 0;
+    //assume there are 16 digits
+    for (int i = 15; i >= 0; i--)
+    {
+        a[i] = new % (power(10, (i + 1)));  //store (i+1)th digit into a[i]. i is counted from right to left
+        new = new - a[i] * power(10, (i + 1));  // the rest of the number
+        if (i % 2)
+        {
+            sum1 = sum1 + ((a[i] * 2) / 10 + (a[i] * 2) % 10);
+        }
+        else
+        {
+            sum2 = sum2 + a[i];
+        }
+
+    }
+    if (!((sum1 + sum2) % 10))
+    {
+        printf("Right\n");
+    }
+    else
+    {
+        printf("Wrong\n");
+    }
+}
+
+
+
+void kind(long number)
+{
+    if ((a[15] == 5) && (a[14] >= 1) && (a[14] <= 5))  //  1 and 2 are 51-55 and the number has 16 digits
+    {
+        printf("Mastercard\n");
+    }
+    else if ((a[15] == 0) && (a[14] == 3) && ((a[13] == 4) || a[13] == 7))
+    {
+        printf("American Express\n");
+    }
+    else if ((a[15] == 4) || ((a[15] == 0) && (a[14] == 0) && (a[13] == 0) && (a[12] == 4)))
+    {
+        printf("Visa\n");
+    }
+    else
+    {
+        printf("Invalid\n");
+    }
+}
+
+int power(int base, int times)
+{
+    int result = 1;
+    for(int i = 0; i < times; i++)
+    {
+        result = result * base;
+    }
+    return result;
+}
